@@ -10,10 +10,17 @@ import static net.corda.core.contracts.ContractsDSL.requireThat;
 
 /* Our contract, governing how our state will evolve over time.
  * See src/main/java/examples/ArtContract.java for an example. */
-public class TokenContract {
+public class TokenContract implements Contract {
+
     public static String ID = "java_bootcamp.TokenContract";
 
     public interface Commands extends CommandData {
         class Issue implements Commands { }
     }
+
+    @Override
+    public void verify(LedgerTransaction tx) throws IllegalArgumentException {
+
+    }
+
 }
