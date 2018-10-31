@@ -64,7 +64,7 @@ dependencies {
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs << "-parameters" // Required for shell commands.
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Xlint:-options" << "-parameters"
 }
 
 task deployNodesJava(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
