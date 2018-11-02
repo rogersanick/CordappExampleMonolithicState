@@ -1,13 +1,7 @@
 package java_bootcamp;
 
 import co.paralleluniverse.fibers.Suspendable;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import com.google.common.collect.ImmutableList;
-=======
->>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
-=======
->>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;

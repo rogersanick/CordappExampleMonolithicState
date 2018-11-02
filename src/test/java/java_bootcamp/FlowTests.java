@@ -33,6 +33,7 @@ public class FlowTests {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     // START TOKEN ISSUE TESTS
 
     @Test
@@ -120,6 +121,8 @@ public class FlowTests {
 =======
 =======
 >>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
+=======
+>>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
 //    @Test
 //    public void transactionConstructedByFlowUsesTheCorrectNotary() throws Exception {
 //        TokenIssueFlow flow = new TokenIssueFlow(nodeB.getInfo().getLegalIdentities().get(0), 99);
@@ -200,6 +203,9 @@ public class FlowTests {
 //        assertEquals(null, signedTransaction.getTx().getTimeWindow());
 //    }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
+=======
 >>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
 =======
 >>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
