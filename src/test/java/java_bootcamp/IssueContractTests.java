@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static net.corda.testing.node.NodeTestUtils.transaction;
 
-public class ContractTests {
+public class IssueContractTests {
     private final TestIdentity alice = new TestIdentity(new CordaX500Name("Alice", "", "GB"));
     private final TestIdentity bob = new TestIdentity(new CordaX500Name("Bob", "", "GB"));
     private MockServices ledgerServices = new MockServices(new TestIdentity(new CordaX500Name("TestId", "", "GB")));

@@ -20,7 +20,8 @@ public class TokenContract implements Contract {
     public static String ID = "java_bootcamp.TokenContract";
 
     public interface Commands extends CommandData {
-        class Issue implements Commands { }
+        class Issue implements Commands { };
+        class Transfer implements Commands { };
     }
 
     @Override
@@ -59,8 +60,37 @@ public class TokenContract implements Contract {
             if (!(requiredSigners.contains(issuersKey))) throw new IllegalArgumentException("Transaction should be signed by the issuer");
 
 
+        } else if (commandType instanceof Commands.Transfer) {
+
+            // Shape
+            if (tx.getInputStates().size() <= 0) throw new IllegalArgumentException("Transaction should have one or more inputs");
+            if (tx.getOutputStates().size() != 1 && tx.getOutputStates().size() != 2) throw new IllegalArgumentException("Transaction should have one or two outputs");
+
+            // Content
+            List <ContractState> outputStates = tx.getOutputStates();
+            List <ContractState> inputStates = tx.getInputStates();
+
+            for (ContractState output: outputStates) {
+                if (!(output instanceof TokenState)) throw new IllegalArgumentException("Transaction should output a token state");
+            }
+
+            int sumOfOutputValues = 0;
+            for (ContractState output: outputStates) {
+                TokenState tokenState = (TokenState) output;
+                sumOfOutputValues += tokenState.getAmount();
+            }
+
+            int sumOfInputValues = 0;
+            for (ContractState input: inputStates) {
+                TokenState tokenState = (TokenState) input;
+                sumOfInputValues += tokenState.getAmount();
+            }
+
+            if (sumOfInputValues != sumOfOutputValues) throw new IllegalArgumentException("Transaction inputs must be equal to transaction outputs");
+
+
         } else {
-            throw new IllegalArgumentException("Transaction command should be of type issue");
+            throw new IllegalArgumentException("Transaction command should be of type 'Issue' or type 'Transfer");
         }
 
     }

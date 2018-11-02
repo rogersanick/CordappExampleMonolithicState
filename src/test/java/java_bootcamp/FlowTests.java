@@ -31,6 +31,8 @@ public class FlowTests {
         network.stopNodes();
     }
 
+    // START TOKEN ISSUE TESTS
+
     @Test
     public void transactionConstructedByFlowUsesTheCorrectNotary() throws Exception {
         TokenIssueFlow flow = new TokenIssueFlow(nodeB.getInfo().getLegalIdentities().get(0), 99);
@@ -110,4 +112,7 @@ public class FlowTests {
         assertEquals(1, signedTransaction.getTx().getAttachments().size());
         assertEquals(null, signedTransaction.getTx().getTimeWindow());
     }
+
+    // START TOKEN TRANSFER TESTS
+
 }
