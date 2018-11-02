@@ -1,19 +1,18 @@
 package java_bootcamp;
 
 import co.paralleluniverse.fibers.Suspendable;
+<<<<<<< HEAD
 import com.google.common.collect.ImmutableList;
+=======
+>>>>>>> parent of 4e739f8... All tests passing for basic TokenIssue content
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 
-import java.security.PublicKey;
-import java.util.List;
-
 /* Our flow, automating the process of updating the ledger.
  * See src/main/java/examples/ArtTransferFlowInitiator.java for an example. */
-
 @InitiatingFlow
 @StartableByRPC
 public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
@@ -44,30 +43,22 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
          *         TODO 1 - Create our TokenState to represent on-ledger tokens!
          * ===========================================================================*/
         // We create our new TokenState.
-        TokenState tokenState = new TokenState(issuer, owner, amount);
+        TokenState tokenState = null;
 
         /* ============================================================================
          *      TODO 3 - Build our token issuance transaction to update the ledger!
          * ===========================================================================*/
         // We build our transaction.
-        TransactionBuilder txBuilder = new TransactionBuilder();
-
-        txBuilder.setNotary(notary);
-
-        txBuilder.addOutputState(tokenState, TokenContract.ID);
-
-        TokenContract.Commands.Issue commandData = new TokenContract.Commands.Issue();
-        List<PublicKey> requiredSigners = ImmutableList.of(issuer.getOwningKey());
-        txBuilder.addCommand(commandData, requiredSigners);
+        TransactionBuilder transactionBuilder = null;
 
         /* ============================================================================
          *          TODO 2 - Write our TokenContract to control token issuance!
          * ===========================================================================*/
-        // We sign the transaction with our private key, making it immutable.
-        SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(txBuilder);
-
         // We check our transaction is valid based on its contracts.
-        txBuilder.verify(getServiceHub());
+        transactionBuilder.verify(getServiceHub());
+
+        // We sign the transaction with our private key, making it immutable.
+        SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(transactionBuilder);
 
         // We get the transaction notarised and recorded automatically by the platform.
         return subFlow(new FinalityFlow(signedTransaction));
