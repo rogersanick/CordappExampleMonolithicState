@@ -1,6 +1,4 @@
 package com.bootcamp;
-
-import com.bootcamp.schema.TokenChildSchemaV1;
 import com.bootcamp.schema.TokenSchemaV1;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.LinearState;
@@ -22,14 +20,12 @@ public class TokenState implements LinearState, QueryableState {
     private final Party issuer;
     private final int amount;
     private final UniqueIdentifier linearId;
-    private final List<TokenChildSchemaV1.PersistentChildToken> childTokens;
 
-    public TokenState (Party issuer, Party owner, int amount, UniqueIdentifier linearId, List<TokenChildSchemaV1.PersistentChildToken> childTokens) {
+    public TokenState (Party issuer, Party owner, int amount, UniqueIdentifier linearId) {
         this.owner = owner;
         this.issuer = issuer;
         this.amount = amount;
         this.linearId = linearId;
-        this.childTokens = childTokens;
     }
 
     public Party getOwner() {
@@ -44,8 +40,6 @@ public class TokenState implements LinearState, QueryableState {
         return amount;
     }
 
-    public List<TokenChildSchemaV1.PersistentChildToken> getChildTokens() { return childTokens; }
-
     @Override
     public UniqueIdentifier getLinearId() {
         return linearId;
@@ -58,8 +52,7 @@ public class TokenState implements LinearState, QueryableState {
                     this.getOwner().getName().toString(),
                     this.getIssuer().getName().toString(),
                     this.getAmount(),
-                    this.linearId.getId(),
-                    this.getChildTokens()
+                    this.linearId.getId()
             );
         } else {
             throw new IllegalArgumentException("Unrecognised schema $schema");

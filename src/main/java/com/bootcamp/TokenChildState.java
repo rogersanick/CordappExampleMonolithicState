@@ -1,13 +1,12 @@
 package com.bootcamp;
 
-import com.bootcamp.schema.TokenChildSchemaV1;
+import com.bootcamp.schema.TokenSchemaV1;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.LinearState;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
 import net.corda.core.schemas.MappedSchema;
-import net.corda.core.schemas.PersistentState;
 import net.corda.core.schemas.QueryableState;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,9 +46,9 @@ public class TokenChildState implements LinearState, QueryableState {
     }
 
     @Override
-    public TokenChildSchemaV1.PersistentChildToken generateMappedObject(MappedSchema schema) {
-        if (schema instanceof TokenChildSchemaV1) {
-            return new TokenChildSchemaV1.PersistentChildToken(
+    public TokenSchemaV1.PersistentChildToken generateMappedObject(MappedSchema schema) {
+        if (schema instanceof TokenSchemaV1) {
+            return new TokenSchemaV1.PersistentChildToken(
                     this.getOwner().getName().toString(),
                     this.getIssuer().getName().toString(),
                     this.getAmount()
@@ -62,7 +61,7 @@ public class TokenChildState implements LinearState, QueryableState {
 
     @Override
     public List<MappedSchema> supportedSchemas() {
-        return ImmutableList.of(new TokenChildSchemaV1());
+        return ImmutableList.of(new TokenSchemaV1());
     }
 
     @NotNull

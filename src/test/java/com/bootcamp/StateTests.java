@@ -17,12 +17,12 @@ public class StateTests {
 
     @Test
     public void tokenStateHasIssuerOwnerAndAmountParamsOfCorrectTypeInConstructor() {
-        new TokenState(alice, bob, 1, new UniqueIdentifier(), new ArrayList());
+        new TokenState(alice, bob, 1, new UniqueIdentifier());
     }
 
     @Test
     public void tokenStateHasGettersForIssuerOwnerAndAmount() {
-        TokenState tokenState = new TokenState(alice, bob, 1, new UniqueIdentifier(), new ArrayList());
+        TokenState tokenState = new TokenState(alice, bob, 1, new UniqueIdentifier());
         assertEquals(alice, tokenState.getIssuer());
         assertEquals(bob, tokenState.getOwner());
         assertEquals(1, tokenState.getAmount());
@@ -30,12 +30,12 @@ public class StateTests {
 
     @Test
     public void tokenStateImplementsContractState() {
-        assert(new TokenState(alice, bob, 1, new UniqueIdentifier(), new ArrayList()) instanceof ContractState);
+        assert(new TokenState(alice, bob, 1, new UniqueIdentifier()) instanceof ContractState);
     }
 
     @Test
     public void tokenStateHasTwoParticipantsTheIssuerAndTheOwner() {
-        TokenState tokenState = new TokenState(alice, bob, 1, new UniqueIdentifier(), new ArrayList());
+        TokenState tokenState = new TokenState(alice, bob, 1, new UniqueIdentifier());
         assertEquals(2, tokenState.getParticipants().size());
         assert(tokenState.getParticipants().contains(alice));
         assert(tokenState.getParticipants().contains(bob));

@@ -1,7 +1,8 @@
 package com.bootcamp;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.bootcamp.schema.TokenChildSchemaV1;
+//import com.bootcamp.schema.TokenChildSchemaV1;
+import com.bootcamp.schema.TokenSchemaV1;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.flows.*;
@@ -48,8 +49,8 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
          *         Create our TokenState to represent on-ledger tokens
          * ===========================================================================*/
 
-        List<TokenChildSchemaV1.PersistentChildToken> listOfChildrenSchemas = new ArrayList();
-        List<TokenChildState> listOfChildrenStates = new ArrayList();
+        List<TokenSchemaV1.PersistentChildToken> listOfChildrenSchemas = new ArrayList<>();
+        List<TokenChildState> listOfChildrenStates = new ArrayList<>();
 
         for (int count = 0; count <=5; count++) {
             TokenChildState child = new TokenChildState(owner, issuer, amount + 2, new UniqueIdentifier());
@@ -59,7 +60,7 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
         }
 
         // We create our new TokenState.
-        TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier(), listOfChildrenSchemas);
+        TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier());
 
         /* ============================================================================
          *      Build our token issuance transaction to update the ledger
@@ -69,12 +70,12 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
 
         txBuilder.setNotary(notary);
 
-        txBuilder.addOutputState(tokenState, TokenContract.ID);
-
         for (int count = 0; count < listOfChildrenStates.size(); count++) {
             TokenChildState child = listOfChildrenStates.get(count);
             txBuilder.addOutputState(child, TokenContract.ID);
         }
+
+        txBuilder.addOutputState(tokenState, TokenContract.ID);
 
         TokenContract.Commands.Issue commandData = new TokenContract.Commands.Issue();
         List<PublicKey> requiredSigners = ImmutableList.of(issuer.getOwningKey());

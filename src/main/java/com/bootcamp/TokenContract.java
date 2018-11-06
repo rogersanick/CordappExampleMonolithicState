@@ -32,27 +32,50 @@ public class TokenContract implements Contract {
 
             // Shape
             if (tx.getInputStates().size() != 0) throw new IllegalArgumentException("Transaction should have no inputs");
-                // Why do we use both of these types of checks?
             if (tx.inputsOfType(TokenState.class).size() != 0) throw new IllegalArgumentException("Transaction should have no inputs");
 
             if (tx.outputsOfType(TokenState.class).size() < 1) throw new IllegalArgumentException("Transaction should have no inputs");
             if (tx.outputsOfType(TokenChildState.class).size() < 1) throw new IllegalArgumentException("Transaction should have no inputs");
 
             // Contents
+
             ContractState outputState = tx.getOutput(0);
-//            if (!(outputState instanceof TokenState) && !(outputState instanceof TokenChildState) ) throw new IllegalArgumentException("Transaction does not output a TokenState");
+            if (!(outputState instanceof TokenState) && !(outputState instanceof TokenChildState) ) throw new IllegalArgumentException("Transaction does not output a TokenState");
 
-            TokenState tokenState = (TokenState) outputState;
-            if (!(tokenState.getAmount() > 0)) throw new IllegalArgumentException("Transaction outputs must be positive");
-
-            // Required Signers
-            Party owner = tokenState.getOwner();
-            PublicKey ownersKey = owner.getOwningKey();
-
-            Party issuer = tokenState.getIssuer();
-            PublicKey issuersKey = issuer.getOwningKey();
-
-            if (!(requiredSigners.contains(issuersKey))) throw new IllegalArgumentException("Transaction should be signed by the issuer");
+            // TODO - Implement check to make sure amount are positive
+//
+//            TokenChildState tokenChildState = null;
+//            TokenState tokenState = null;
+//
+//            try {
+//                tokenChildState = (TokenChildState) outputState;
+//            } catch (Error err) {
+//                tokenState = (TokenState) outputState;
+//            }
+//
+//            if (tokenChildState != null) {
+//
+//                // Required Signers
+//                Party owner = tokenState.getOwner();
+//                PublicKey ownersKey = owner.getOwningKey();
+//
+//                Party issuer = tokenState.getIssuer();
+//                PublicKey issuersKey = issuer.getOwningKey();
+//
+//                if (!(requiredSigners.contains(issuersKey))) throw new IllegalArgumentException("Transaction should be signed by the issuer");
+//
+//            } else {
+//
+//                // Required Signers
+//                Party owner = tokenState.getOwner();
+//                PublicKey ownersKey = owner.getOwningKey();
+//
+//                Party issuer = tokenState.getIssuer();
+//                PublicKey issuersKey = issuer.getOwningKey();
+//
+//                if (!(requiredSigners.contains(issuersKey))) throw new IllegalArgumentException("Transaction should be signed by the issuer");
+//
+//            }
 
 
         } else {
