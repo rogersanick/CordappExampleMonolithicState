@@ -32,18 +32,17 @@ public class TokenContract implements Contract {
 
             // Shape
             if (tx.getInputStates().size() != 0) throw new IllegalArgumentException("Transaction should have no inputs");
-            if (tx.getOutputStates().size() != 1) throw new IllegalArgumentException("Transaction should have no inputs");
                 // Why do we use both of these types of checks?
             if (tx.inputsOfType(TokenState.class).size() != 0) throw new IllegalArgumentException("Transaction should have no inputs");
-            if (tx.outputsOfType(TokenState.class).size() != 1) throw new IllegalArgumentException("Transaction should have no inputs");
+
+            if (tx.outputsOfType(TokenState.class).size() < 1) throw new IllegalArgumentException("Transaction should have no inputs");
+            if (tx.outputsOfType(TokenChildState.class).size() < 1) throw new IllegalArgumentException("Transaction should have no inputs");
 
             // Contents
             ContractState outputState = tx.getOutput(0);
-
-            if (!(outputState instanceof TokenState)) throw new IllegalArgumentException("Transaction does not output a TokenState");
+//            if (!(outputState instanceof TokenState) && !(outputState instanceof TokenChildState) ) throw new IllegalArgumentException("Transaction does not output a TokenState");
 
             TokenState tokenState = (TokenState) outputState;
-
             if (!(tokenState.getAmount() > 0)) throw new IllegalArgumentException("Transaction outputs must be positive");
 
             // Required Signers

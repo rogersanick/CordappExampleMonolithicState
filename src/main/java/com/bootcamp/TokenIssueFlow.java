@@ -49,13 +49,14 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
          * ===========================================================================*/
 
         List<TokenChildSchemaV1.PersistentChildToken> listOfChildrenSchemas = new ArrayList();
+        List<TokenChildState> listOfChildrenStates = new ArrayList();
 
         for (int count = 0; count <=5; count++) {
             TokenChildState child = new TokenChildState(owner, issuer, amount + 2, new UniqueIdentifier());
+            listOfChildrenStates.add(child);
             List<MappedSchema> supportedSchemas = child.supportedSchemas();
             listOfChildrenSchemas.add(child.generateMappedObject(supportedSchemas.get(0)));
         }
-
 
         // We create our new TokenState.
         TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier(), listOfChildrenSchemas);
@@ -69,6 +70,11 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
         txBuilder.setNotary(notary);
 
         txBuilder.addOutputState(tokenState, TokenContract.ID);
+
+        for (int count = 0; count < listOfChildrenStates.size(); count++) {
+            TokenChildState child = listOfChildrenStates.get(count);
+            txBuilder.addOutputState(child, TokenContract.ID);
+        }
 
         TokenContract.Commands.Issue commandData = new TokenContract.Commands.Issue();
         List<PublicKey> requiredSigners = ImmutableList.of(issuer.getOwningKey());
