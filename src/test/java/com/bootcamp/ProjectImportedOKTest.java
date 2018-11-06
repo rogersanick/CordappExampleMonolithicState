@@ -1,4 +1,4 @@
-package java_bootcamp;
+package com.bootcamp;
 
 import org.junit.Test;
 

@@ -1,14 +1,18 @@
-package java_bootcamp;
+package com.bootcamp;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.bootcamp.schema.TokenChildSchemaV1;
 import com.google.common.collect.ImmutableList;
+import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
+import net.corda.core.schemas.MappedSchema;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.List;
 
 /* Our flow, automating the process of updating the ledger.
@@ -41,13 +45,23 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
         Party issuer = getOurIdentity();
 
         /* ============================================================================
-         *         TODO 1 - Create our TokenState to represent on-ledger tokens!
+         *         Create our TokenState to represent on-ledger tokens
          * ===========================================================================*/
+
+        List<TokenChildSchemaV1.PersistentChildToken> listOfChildrenSchemas = new ArrayList();
+
+        for (int count = 0; count <=5; count++) {
+            TokenChildState child = new TokenChildState(owner, issuer, amount + 2, new UniqueIdentifier());
+            List<MappedSchema> supportedSchemas = child.supportedSchemas();
+            listOfChildrenSchemas.add(child.generateMappedObject(supportedSchemas.get(0)));
+        }
+
+
         // We create our new TokenState.
-        TokenState tokenState = new TokenState(issuer, owner, amount);
+        TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier(), listOfChildrenSchemas);
 
         /* ============================================================================
-         *      TODO 3 - Build our token issuance transaction to update the ledger!
+         *      Build our token issuance transaction to update the ledger
          * ===========================================================================*/
         // We build our transaction.
         TransactionBuilder txBuilder = new TransactionBuilder();
@@ -61,7 +75,7 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
         txBuilder.addCommand(commandData, requiredSigners);
 
         /* ============================================================================
-         *          TODO 2 - Write our TokenContract to control token issuance!
+         *          Write our TokenContract to control token issuance!
          * ===========================================================================*/
         // We sign the transaction with our private key, making it immutable.
         SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(txBuilder);

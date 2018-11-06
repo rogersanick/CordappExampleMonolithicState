@@ -1,6 +1,7 @@
-package java_bootcamp;
+package com.bootcamp;
 
 import net.corda.core.contracts.Contract;
+import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.testing.contracts.DummyState;
 import net.corda.testing.core.DummyCommandData;
@@ -8,13 +9,15 @@ import net.corda.testing.core.TestIdentity;
 import net.corda.testing.node.MockServices;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static net.corda.testing.node.NodeTestUtils.transaction;
 
 public class ContractTests {
     private final TestIdentity alice = new TestIdentity(new CordaX500Name("Alice", "", "GB"));
     private final TestIdentity bob = new TestIdentity(new CordaX500Name("Bob", "", "GB"));
     private MockServices ledgerServices = new MockServices(new TestIdentity(new CordaX500Name("TestId", "", "GB")));
-    private TokenState tokenState = new TokenState(alice.getParty(), bob.getParty(), 1);
+    private TokenState tokenState = new TokenState(alice.getParty(), bob.getParty(), 1, new UniqueIdentifier(), new ArrayList());
 
     @Test
     public void tokenContractImplementsContract() {
@@ -102,9 +105,9 @@ public class ContractTests {
 
     @Test
     public void tokenContractRequiresTheTransactionsOutputToHaveAPositiveAmount() {
-        TokenState zeroTokenState = new TokenState(alice.getParty(), bob.getParty(), 0);
-        TokenState negativeTokenState = new TokenState(alice.getParty(), bob.getParty(), -1);
-        TokenState positiveTokenState = new TokenState(alice.getParty(), bob.getParty(), 2);
+        TokenState zeroTokenState = new TokenState(alice.getParty(), bob.getParty(), 0, new UniqueIdentifier(), new ArrayList());
+        TokenState negativeTokenState = new TokenState(alice.getParty(), bob.getParty(), -1, new UniqueIdentifier(), new ArrayList());
+        TokenState positiveTokenState = new TokenState(alice.getParty(), bob.getParty(), 2, new UniqueIdentifier(), new ArrayList());
 
         transaction(ledgerServices, tx -> {
             // Has zero-amount TokenState, will fail.
@@ -160,7 +163,7 @@ public class ContractTests {
 
     @Test
     public void tokenContractRequiresTheIssuerToBeARequiredSignerInTheTransaction() {
-        TokenState tokenStateWhereBobIsIssuer = new TokenState(bob.getParty(), alice.getParty(), 1);
+        TokenState tokenStateWhereBobIsIssuer = new TokenState(bob.getParty(), alice.getParty(), 1, new UniqueIdentifier(), new ArrayList());
 
         transaction(ledgerServices, tx -> {
             // Issuer is not a required signer, will fail.

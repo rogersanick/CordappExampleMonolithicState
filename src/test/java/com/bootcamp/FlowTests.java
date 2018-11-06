@@ -1,4 +1,4 @@
-package java_bootcamp;
+package com.bootcamp;
 
 import com.google.common.collect.ImmutableList;
 import net.corda.core.concurrent.CordaFuture;
@@ -68,7 +68,7 @@ public class FlowTests {
         assertEquals(1, signedTransaction.getTx().getOutputStates().size());
         TransactionState output = signedTransaction.getTx().getOutputs().get(0);
 
-        assertEquals("java_bootcamp.TokenContract", output.getContract());
+        assertEquals("TokenContract", output.getContract());
     }
 
     @Test
