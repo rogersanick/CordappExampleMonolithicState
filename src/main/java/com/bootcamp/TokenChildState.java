@@ -52,7 +52,6 @@ public class TokenChildState implements LinearState, QueryableState {
                     this.getOwner().getName().toString(),
                     this.getIssuer().getName().toString(),
                     this.getAmount()
-
             );
         } else {
             throw new IllegalArgumentException("Unrecognised schema $schema");
