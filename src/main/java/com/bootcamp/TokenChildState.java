@@ -28,15 +28,15 @@ public class TokenChildState implements LinearState, QueryableState {
         this.linearId = linearId;
     }
 
-    public Party getOwner() {
+    private Party getOwner() {
         return owner;
     }
 
-    public Party getIssuer() {
+    private Party getIssuer() {
         return issuer;
     }
 
-    public int getAmount() {
+    private int getAmount() {
         return amount;
     }
 
@@ -68,5 +68,4 @@ public class TokenChildState implements LinearState, QueryableState {
     public List<AbstractParty> getParticipants() {
         return ImmutableList.of(issuer, owner);
     }
-
 }

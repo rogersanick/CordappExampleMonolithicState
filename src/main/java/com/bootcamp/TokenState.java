@@ -41,11 +41,13 @@ public class TokenState implements LinearState, QueryableState {
     }
 
     @Override
+    @NotNull
     public UniqueIdentifier getLinearId() {
         return linearId;
     }
 
     @Override
+    @NotNull
     public PersistentState generateMappedObject(MappedSchema schema) {
         if (schema instanceof TokenSchemaV1) {
             return new TokenSchemaV1.PersistentToken(
@@ -60,12 +62,13 @@ public class TokenState implements LinearState, QueryableState {
     }
 
     @Override
+    @NotNull
     public Iterable<MappedSchema> supportedSchemas() {
         return ImmutableList.of(new TokenSchemaV1());
     }
 
-    @NotNull
     @Override
+    @NotNull
     public List<AbstractParty> getParticipants() {
         return ImmutableList.of(issuer, owner);
     }
