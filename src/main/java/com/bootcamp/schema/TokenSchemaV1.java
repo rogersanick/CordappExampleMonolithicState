@@ -77,7 +77,7 @@ public class TokenSchemaV1 extends MappedSchema {
         private final String issuer;
         @Column(name = "amount")
         private final int amount;
-        @Column(name = "child proof")
+        @Column(name = "child_proof")
         private final String childProof;
         @ManyToOne(targetEntity = PersistentToken.class)
         private final TokenState persistentToken;
