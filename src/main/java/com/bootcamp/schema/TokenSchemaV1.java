@@ -1,6 +1,5 @@
 package com.bootcamp.schema;
 
-import com.bootcamp.TokenChildState;
 import com.bootcamp.TokenState;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.schemas.MappedSchema;
