@@ -1,6 +1,4 @@
 package com.bootcamp.schema;
-
-import com.bootcamp.TokenChildState;
 import com.bootcamp.TokenState;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.schemas.MappedSchema;
@@ -71,7 +69,7 @@ public class TokenSchemaV1 extends MappedSchema {
 
     @Entity
     @Table(name = "token_child_states")
-    public static class PersistentChildToken extends PersistentState {
+    public static class PersistentChildToken {
         @Column(name = "owner")
         private final String owner;
         @Column(name = "issuer")
