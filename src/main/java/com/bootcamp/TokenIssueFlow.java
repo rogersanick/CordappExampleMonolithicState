@@ -1,7 +1,6 @@
 package com.bootcamp;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.bootcamp.schema.TokenSchemaV1;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.flows.*;
@@ -48,15 +47,28 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
          *         Create our TokenState to represent on-ledger tokens
          * ===========================================================================*/
 
+        // Functioning loop to create child states.
         List<TokenChildState> listOfChildrenStates = new ArrayList<>();
 
         for (int count = 0; count <=5; count++) {
             TokenChildState child = new TokenChildState(owner, issuer, amount + 2, new UniqueIdentifier());
             listOfChildrenStates.add(child);
+            List<MappedSchema> supportedSchemas = child.supportedSchemas();
         }
 
-        // We create our new TokenState.
         TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier());
+
+        // Example Code with child schemas being passed to the state
+//        for (int count = 0; count <=5; count++) {
+//            TokenChildState child = new TokenChildState(owner, issuer, amount + 2, new UniqueIdentifier());
+//            listOfChildrenStates.add(child);
+//            List<MappedSchema> supportedSchemas = child.supportedSchemas();
+//            listOfChildrenSchemas.add(child.generateMappedObject(supportedSchemas.get(0)));
+//        }
+//
+//        // We create our new TokenState.
+//        TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier(), listOfChildrenSchemas);
+
 
         /* ============================================================================
          *      Build our token issuance transaction to update the ledger
