@@ -17,7 +17,7 @@ public class ContractTests {
     private final TestIdentity alice = new TestIdentity(new CordaX500Name("Alice", "", "GB"));
     private final TestIdentity bob = new TestIdentity(new CordaX500Name("Bob", "", "GB"));
     private MockServices ledgerServices = new MockServices(new TestIdentity(new CordaX500Name("TestId", "", "GB")));
-    private TokenState tokenState = new TokenState(alice.getParty(), bob.getParty(), 1, new UniqueIdentifier());
+    private TokenState tokenState = new TokenState(alice.getParty(), bob.getParty(), 1, new UniqueIdentifier(), new ArrayList<>());
 
     @Test
     public void tokenContractImplementsContract() {
@@ -105,9 +105,9 @@ public class ContractTests {
 
     @Test
     public void tokenContractRequiresTheTransactionsOutputToHaveAPositiveAmount() {
-        TokenState zeroTokenState = new TokenState(alice.getParty(), bob.getParty(), 0, new UniqueIdentifier());
-        TokenState negativeTokenState = new TokenState(alice.getParty(), bob.getParty(), -1, new UniqueIdentifier());
-        TokenState positiveTokenState = new TokenState(alice.getParty(), bob.getParty(), 2, new UniqueIdentifier());
+        TokenState zeroTokenState = new TokenState(alice.getParty(), bob.getParty(), 0, new UniqueIdentifier(), new ArrayList<>());
+        TokenState negativeTokenState = new TokenState(alice.getParty(), bob.getParty(), -1, new UniqueIdentifier(), new ArrayList<>());
+        TokenState positiveTokenState = new TokenState(alice.getParty(), bob.getParty(), 2, new UniqueIdentifier(), new ArrayList<>());
 
         transaction(ledgerServices, tx -> {
             // Has zero-amount TokenState, will fail.
@@ -163,7 +163,7 @@ public class ContractTests {
 
     @Test
     public void tokenContractRequiresTheIssuerToBeARequiredSignerInTheTransaction() {
-        TokenState tokenStateWhereBobIsIssuer = new TokenState(bob.getParty(), alice.getParty(), 1, new UniqueIdentifier());
+        TokenState tokenStateWhereBobIsIssuer = new TokenState(bob.getParty(), alice.getParty(), 1, new UniqueIdentifier(), new ArrayList<>());
 
         transaction(ledgerServices, tx -> {
             // Issuer is not a required signer, will fail.
