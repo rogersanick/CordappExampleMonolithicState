@@ -6,7 +6,6 @@ import net.corda.core.schemas.PersistentState;
 import net.corda.core.serialization.CordaSerializable;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,12 +63,15 @@ public class TokenSchemaV1 extends MappedSchema {
             return linearId;
         }
 
-        public List<PersistentChildToken> getChildTokens() { return childTokens; }
+        public List<PersistentChildToken> getChildTokens() { return listOfPersistentChildTokens; }
     }
 
     @Entity
+    @CordaSerializable
     @Table(name = "token_child_states")
     public static class PersistentChildToken {
+        @Id
+        private final UUID Id;
         @Column(name = "owner")
         private final String owner;
         @Column(name = "issuer")
@@ -82,6 +84,7 @@ public class TokenSchemaV1 extends MappedSchema {
         private final TokenState persistentToken;
 
         public PersistentChildToken(String owner, String issuer, int amount) {
+            this.Id = UUID.randomUUID();
             this.owner = owner;
             this.issuer = issuer;
             this.amount = amount;
@@ -91,11 +94,16 @@ public class TokenSchemaV1 extends MappedSchema {
 
         // Default constructor required by hibernate.
         public PersistentChildToken() {
+            this.Id = UUID.randomUUID();
             this.owner = "";
             this.issuer = "";
             this.amount = 0;
             this.persistentToken = null;
             this.childProof = "I am a child";
+        }
+
+        public UUID getId() {
+            return Id;
         }
 
         public String getOwner() {
