@@ -49,18 +49,15 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
          *         Create our TokenState to represent on-ledger tokens
          * ===========================================================================*/
 
-        List<TokenSchemaV1.PersistentChildToken> listOfChildrenSchemas = new ArrayList<>();
-        List<TokenChildState> listOfChildrenStates = new ArrayList<>();
+        List<TokenSchemaV1.PersistentChildToken> listOfPersistentChildTokens = new ArrayList<>();
 
         for (int count = 0; count <=5; count++) {
-            TokenChildState child = new TokenChildState(owner, issuer, amount + 2, new UniqueIdentifier());
-            listOfChildrenStates.add(child);
-            List<MappedSchema> supportedSchemas = child.supportedSchemas();
-            listOfChildrenSchemas.add(child.generateMappedObject(supportedSchemas.get(0)));
+            TokenSchemaV1.PersistentChildToken child = new TokenSchemaV1.PersistentChildToken(owner.getName().toString(), issuer.getName().toString(), amount + 2);
+            listOfPersistentChildTokens.add(child);
         }
 
         // We create our new TokenState.
-        TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier());
+        TokenState tokenState = new TokenState(issuer, owner, amount, new UniqueIdentifier(), listOfPersistentChildTokens);
 
         /* ============================================================================
          *      Build our token issuance transaction to update the ledger
@@ -69,11 +66,6 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
         TransactionBuilder txBuilder = new TransactionBuilder();
 
         txBuilder.setNotary(notary);
-
-        for (int count = 0; count < listOfChildrenStates.size(); count++) {
-            TokenChildState child = listOfChildrenStates.get(count);
-            txBuilder.addOutputState(child, TokenContract.ID);
-        }
 
         txBuilder.addOutputState(tokenState, TokenContract.ID);
 

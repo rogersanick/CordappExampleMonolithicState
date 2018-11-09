@@ -28,15 +28,15 @@ public class TokenSchemaV1 extends MappedSchema {
         @Column(name = "issuer") private final String issuer;
         @Column(name = "amount") private final int amount;
         @Column(name = "linear_id") private final UUID linearId;
-        @OneToMany(mappedBy = "persistentToken") private final List<PersistentChildToken> childTokens;
+        @OneToMany(mappedBy = "persistentToken") private final List<PersistentChildToken> listOfPersistentChildTokens;
         //get() = field
 
-        public PersistentToken(String owner, String issuer, int amount, UUID linearId) {
+        public PersistentToken(String owner, String issuer, int amount, UUID linearId, List<PersistentChildToken> listOfPersistentChildTokens) {
             this.owner = owner;
             this.issuer = issuer;
             this.amount = amount;
             this.linearId = linearId;
-            this.childTokens = new ArrayList<>();
+            this.listOfPersistentChildTokens = listOfPersistentChildTokens;
         }
 
         // Default constructor required by hibernate.
@@ -45,7 +45,7 @@ public class TokenSchemaV1 extends MappedSchema {
             this.issuer = "";
             this.amount = 0;
             this.linearId = UUID.randomUUID();
-            this.childTokens = null;
+            this.listOfPersistentChildTokens = null;
         }
 
         public String getOwner() {

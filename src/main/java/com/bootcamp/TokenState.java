@@ -20,12 +20,14 @@ public class TokenState implements LinearState, QueryableState {
     private final Party issuer;
     private final int amount;
     private final UniqueIdentifier linearId;
+    private List<TokenSchemaV1.PersistentChildToken> listOfPersistentChildTokens;
 
-    public TokenState (Party issuer, Party owner, int amount, UniqueIdentifier linearId) {
+    public TokenState (Party issuer, Party owner, int amount, UniqueIdentifier linearId, List<TokenSchemaV1.PersistentChildToken> listOfPersistentChildTokens) {
         this.owner = owner;
         this.issuer = issuer;
         this.amount = amount;
         this.linearId = linearId;
+        this.listOfPersistentChildTokens = listOfPersistentChildTokens;
     }
 
     public Party getOwner() {
@@ -45,6 +47,10 @@ public class TokenState implements LinearState, QueryableState {
         return linearId;
     }
 
+    public List<TokenSchemaV1.PersistentChildToken> getListOfPersistentChildTokens() {
+        return listOfPersistentChildTokens;
+    }
+
     @Override
     public PersistentState generateMappedObject(MappedSchema schema) {
         if (schema instanceof TokenSchemaV1) {
@@ -52,7 +58,8 @@ public class TokenState implements LinearState, QueryableState {
                     this.getOwner().getName().toString(),
                     this.getIssuer().getName().toString(),
                     this.getAmount(),
-                    this.linearId.getId()
+                    this.linearId.getId(),
+                    this.getListOfPersistentChildTokens()
             );
         } else {
             throw new IllegalArgumentException("Unrecognised schema $schema");
