@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import net.corda.core.schemas.MappedSchema;
 import net.corda.core.schemas.PersistentState;
 import net.corda.core.serialization.CordaSerializable;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,7 +27,12 @@ public class TokenSchemaV1 extends MappedSchema {
         @Column(name = "issuer") private final String issuer;
         @Column(name = "amount") private final int amount;
         @Column(name = "linear_id") private final UUID linearId;
-        @OneToMany(mappedBy = "persistentToken", cascade = CascadeType.PERSIST) private final List<PersistentChildToken> listOfPersistentChildTokens;
+        @OneToMany(cascade = CascadeType.PERSIST)
+        @JoinColumns({
+                @JoinColumn(name = "output_index", referencedColumnName = "output_index"),
+                @JoinColumn(name = "transaction_id", referencedColumnName = "transaction_id"),
+        })
+        private final List<PersistentChildToken> listOfPersistentChildTokens;
 
         public PersistentToken(String owner, String issuer, int amount, UUID linearId, List<PersistentChildToken> listOfPersistentChildTokens) {
             this.owner = owner;
@@ -78,7 +82,7 @@ public class TokenSchemaV1 extends MappedSchema {
         private final String issuer;
         @Column(name = "amount")
         private final int amount;
-        @Column(name = "child proof")
+        @Column(name = "child_proof")
         private final String childProof;
         @ManyToOne(targetEntity = PersistentToken.class)
         private final TokenState persistentToken;
