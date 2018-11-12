@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.corda.core.schemas.MappedSchema;
 import net.corda.core.schemas.PersistentState;
 import net.corda.core.serialization.CordaSerializable;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,8 +28,7 @@ public class TokenSchemaV1 extends MappedSchema {
         @Column(name = "issuer") private final String issuer;
         @Column(name = "amount") private final int amount;
         @Column(name = "linear_id") private final UUID linearId;
-        @OneToMany(mappedBy = "persistentToken") private final List<PersistentChildToken> listOfPersistentChildTokens;
-        //get() = field
+        @OneToMany(mappedBy = "persistentToken", cascade = CascadeType.PERSIST) private final List<PersistentChildToken> listOfPersistentChildTokens;
 
         public PersistentToken(String owner, String issuer, int amount, UUID linearId, List<PersistentChildToken> listOfPersistentChildTokens) {
             this.owner = owner;
