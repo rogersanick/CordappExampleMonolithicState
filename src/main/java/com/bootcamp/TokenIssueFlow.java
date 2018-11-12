@@ -81,7 +81,6 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
 
         // We check our transaction is valid based on its contracts.
         txBuilder.verify(getServiceHub());
-
         // We get the transaction notarised and recorded automatically by the platform.
         return subFlow(new FinalityFlow(signedTransaction));
     }
