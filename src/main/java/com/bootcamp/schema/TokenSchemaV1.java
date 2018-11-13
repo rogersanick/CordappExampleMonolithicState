@@ -17,7 +17,7 @@ import java.util.UUID;
 public class TokenSchemaV1 extends MappedSchema {
 
     public TokenSchemaV1() {
-        super(TokenSchema.class, 1, ImmutableList.of(PersistentToken.class, PersistentChildToken.class));
+        super(TokenSchema.class, 1, ImmutableList.of(PersistentToken.class, PersistentChildToken.class, PersistentGrandChildToken.class));
     }
 
     @Entity
@@ -86,14 +86,19 @@ public class TokenSchemaV1 extends MappedSchema {
         private final String childProof;
         @ManyToOne(targetEntity = PersistentToken.class)
         private final TokenState persistentToken;
+        @OneToMany(cascade = CascadeType.PERSIST)
+        @JoinColumn(name = "parent_linear_id", referencedColumnName = "Id")
+        private final List<PersistentGrandChildToken> listOfPersistentGrandChildTokens;
 
-        public PersistentChildToken(String owner, String issuer, int amount) {
+
+        public PersistentChildToken(String owner, String issuer, int amount, List<PersistentGrandChildToken> listOfPersistentGrandChildTokens) {
             this.Id = UUID.randomUUID();
             this.owner = owner;
             this.issuer = issuer;
             this.amount = amount;
             this.persistentToken = null;
             this.childProof = "I am a child";
+            this.listOfPersistentGrandChildTokens = listOfPersistentGrandChildTokens;
         }
 
         // Default constructor required by hibernate.
@@ -104,6 +109,7 @@ public class TokenSchemaV1 extends MappedSchema {
             this.amount = 0;
             this.persistentToken = null;
             this.childProof = "I am a child";
+            this.listOfPersistentGrandChildTokens = null;
         }
 
         public UUID getId() {
@@ -125,5 +131,66 @@ public class TokenSchemaV1 extends MappedSchema {
         public TokenState getPersistentToken() {
             return persistentToken;
         }
+
+
+
     }
+
+    @Entity
+    @CordaSerializable
+    @Table(name = "token_grand_child_states")
+    public static class PersistentGrandChildToken {
+        @Id
+        private final UUID Id;
+        @Column(name = "owner")
+        private final String owner;
+        @Column(name = "issuer")
+        private final String issuer;
+        @Column(name = "amount")
+        private final int amount;
+        @Column(name = "child_proof")
+        private final String childProof;
+        @ManyToOne(targetEntity = PersistentChildToken.class)
+        private final TokenSchemaV1.PersistentChildToken persistentChildToken;
+
+        public PersistentGrandChildToken(String owner, String issuer, int amount) {
+            this.Id = UUID.randomUUID();
+            this.owner = owner;
+            this.issuer = issuer;
+            this.amount = amount;
+            this.persistentChildToken = null;
+            this.childProof = "I am a child";
+        }
+
+        // Default constructor required by hibernate.
+        public PersistentGrandChildToken() {
+            this.Id = UUID.randomUUID();
+            this.owner = "";
+            this.issuer = "";
+            this.amount = 0;
+            this.persistentChildToken = null;
+            this.childProof = "I am a child";
+        }
+
+        public UUID getId() {
+            return Id;
+        }
+
+        public String getOwner() {
+            return owner;
+        }
+
+        public String getIssuer() {
+            return issuer;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public TokenSchemaV1.PersistentChildToken getPersistentChildToken() {
+            return persistentChildToken;
+        }
+    }
+
 }
