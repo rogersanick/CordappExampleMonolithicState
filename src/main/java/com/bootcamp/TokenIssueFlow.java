@@ -49,16 +49,17 @@ public class TokenIssueFlow extends FlowLogic<SignedTransaction> {
          *         Create our TokenState to represent on-ledger tokens
          * ===========================================================================*/
 
-        List<TokenSchemaV1.PersistentGrandChildToken> listOfPersistentGrandChildTokens = new ArrayList<>();
-
-        for (int count = 0; count <= 5; count++) {
-            TokenSchemaV1.PersistentGrandChildToken grandChild = new TokenSchemaV1.PersistentGrandChildToken(owner.getName().toString(), issuer.getName().toString(), amount + 2);
-            listOfPersistentGrandChildTokens.add(grandChild);
-        }
-
         List<TokenSchemaV1.PersistentChildToken> listOfPersistentChildTokens = new ArrayList<>();
 
         for (int count = 0; count <=5; count++) {
+
+            List<TokenSchemaV1.PersistentGrandChildToken> listOfPersistentGrandChildTokens = new ArrayList<>();
+
+            for (int innerCount = 0; innerCount <= 5; innerCount++) {
+                TokenSchemaV1.PersistentGrandChildToken grandChild = new TokenSchemaV1.PersistentGrandChildToken(owner.getName().toString(), issuer.getName().toString(), amount + 2);
+                listOfPersistentGrandChildTokens.add(grandChild);
+            }
+
             TokenSchemaV1.PersistentChildToken child = new TokenSchemaV1.PersistentChildToken(owner.getName().toString(), issuer.getName().toString(), amount + 2, listOfPersistentGrandChildTokens);
             listOfPersistentChildTokens.add(child);
         }
